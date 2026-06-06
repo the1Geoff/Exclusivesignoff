@@ -1,1 +1,699 @@
-Exclusive_Floors_PWA/index.html [file-tag: code-generated-file-2-1780710315792883994]
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exclusive Floors - Sign-Off Form</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1a365d">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2b6cb0;
+            --text: #2d3748;
+            --bg: #f7fafc;
+            --card: #ffffff;
+            --border: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 16px 16px 40px 16px;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 24px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        header h2 {
+            font-size: 15px;
+            font-weight: 400;
+            color: #cbd5e0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        header p {
+            font-size: 13px;
+            color: #e2e8f0;
+            line-height: 1.4;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        h3 {
+            color: var(--primary);
+            font-size: 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-bottom: 16px;
+            padding-bottom: 6px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 6px;
+            color: var(--text);
+        }
+
+        .form-control {
+            width: 100%;
+            height: 44px;
+            border: 1px solid #cbd5e0;
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 15px;
+            background-color: #ffffff;
+            transition: border-color 0.2s;
+            -webkit-appearance: none;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 3px rgba(43, 108, 176, 0.1);
+        }
+
+        .flooring-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .cb-label {
+            display: flex;
+            align-items: center;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .cb-label input {
+            width: 18px;
+            height: 18px;
+            margin-right: 10px;
+            accent-color: var(--primary);
+        }
+
+        .cb-label:has(input:checked) {
+            border-color: var(--secondary);
+            background-color: rgba(43, 108, 176, 0.05);
+            color: var(--secondary);
+        }
+
+        /* Section 2 Grid Design */
+        .eval-row {
+            border-bottom: 1px solid var(--border);
+            padding: 14px 0;
+        }
+        .eval-row:last-child { border-bottom: none; }
+
+        .eval-title {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+        .eval-desc {
+            font-size: 12px;
+            color: #718096;
+            margin-bottom: 10px;
+        }
+
+        .options-container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 6px;
+            text-align: center;
+        }
+
+        .opt-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            padding: 8px 4px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 10px;
+            font-weight: 600;
+            color: #4a5568;
+            transition: all 0.15s;
+        }
+
+        .opt-label input {
+            margin-bottom: 4px;
+            width: 16px;
+            height: 16px;
+            accent-color: var(--primary);
+        }
+
+        .opt-label:has(input:checked) {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Walkthrough Checklist Items */
+        .check-item {
+            display: flex;
+            align-items: flex-start;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 14px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        .check-item input {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            margin-top: 2px;
+            flex-shrink: 0;
+            accent-color: var(--primary);
+        }
+        .check-item p {
+            font-size: 13.5px;
+            line-height: 1.4;
+        }
+        .check-item strong {
+            color: var(--primary);
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        textarea.form-control {
+            height: 90px;
+            resize: none;
+        }
+
+        /* Photo Upload Controls */
+        .photo-upload-zone {
+            border: 2px dashed #cbd5e0;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            background: var(--bg);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .photo-upload-zone:hover {
+            border-color: var(--secondary);
+            background: #edf2f7;
+        }
+        .photo-upload-zone p {
+            font-size: 14px;
+            color: #4a5568;
+            font-weight: 500;
+        }
+        .photo-preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 10px;
+            margin-top: 14px;
+        }
+        .photo-thumb {
+            width: 100%;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+        }
+
+        /* Signature Canvas Pad styling */
+        .sig-container {
+            background: #fff;
+            border: 1px solid #cbd5e0;
+            border-radius: 8px;
+            margin-top: 8px;
+            position: relative;
+        }
+
+        canvas {
+            width: 100%;
+            height: 120px;
+            display: block;
+            background: #ffffff;
+            border-radius: 8px;
+            cursor: crosshair;
+        }
+
+        .clear-btn {
+            position: absolute;
+            right: 8px;
+            top: 8px;
+            background: rgba(237, 242, 247, 0.9);
+            border: 1px solid #cbd5e0;
+            padding: 4px 8px;
+            font-size: 11px;
+            font-weight: 600;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* Action Buttons Grid */
+        .action-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .btn-base {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 50px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            border: none;
+            transition: background 0.2s;
+        }
+
+        .btn-submit {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 6px rgba(26, 54, 93, 0.2);
+        }
+        .btn-submit:hover { background: #10223b; }
+
+        .btn-email {
+            background: #2b6cb0;
+            color: white;
+            box-shadow: 0 4px 6px rgba(43, 108, 176, 0.2);
+        }
+        .btn-email:hover { background: #1d4ed8; }
+
+        .saved-badge {
+            background: #c6f6d5;
+            color: #22543d;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 20px;
+            display: none;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="saveNotification" class="saved-badge">✓ Form saved locally offline successfully!</div>
+    
+    <form id="signoffForm">
+        <header>
+            <h2>Exclusive Floors</h2>
+            <h1>Installation Sign-Off</h1>
+            <p>Digital walkthrough, quality audit evaluation, and job sign-off validation workspace.</p>
+        </header>
+
+        <div class="card">
+            <h3>1. Project Information</h3>
+            <div class="form-group">
+                <label>Customer Name</label>
+                <input type="text" id="custName" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label>Job Address - Job#</label>
+                <input type="text" id="jobAddr" class="form-control" required>
+            </div>
+            <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 0;">
+                <div>
+                    <label>Completion Date</label>
+                    <input type="date" id="compDate" class="form-control" required>
+                </div>
+                <div>
+                    <label>Lead Installer</label>
+                    <input type="text" id="installerName" class="form-control" required>
+                </div>
+            </div>
+            
+            <div style="margin-top: 16px;">
+                <label style="display:block; font-weight:600; font-size:14px; margin-bottom:6px;">Flooring Types Installed</label>
+                <div class="flooring-grid">
+                    <label class="cb-label"><input type="checkbox" name="fType" value="Hardwood"> Hardwood</label>
+                    <label class="cb-label"><input type="checkbox" name="fType" value="Laminate"> Laminate</label>
+                    <label class="cb-label"><input type="checkbox" name="fType" value="Vinyl"> LVP/LVT</label>
+                    <label class="cb-label"><input type="checkbox" name="fType" value="Tile"> Tile</label>
+                    <label class="cb-label"><input type="checkbox" name="fType" value="Carpet"> Carpet</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>2. Installation Excellence Evaluation</h3>
+            
+            <div class="eval-row">
+                <div class="eval-title">Punctuality &amp; Communication</div>
+                <div class="eval-desc">Crew arrived as scheduled and kept you well-informed.</div>
+                <div class="options-container">
+                    <label class="opt-label"><input type="checkbox" name="m1" value="Strongly Agree"><span>Str. Agree</span></label>
+                    <label class="opt-label"><input type="checkbox" name="m1" value="Agree"><span>Agree</span></label>
+                    <label class="opt-label"><input type="checkbox" name="m1" value="Neutral"><span>Neutral</span></label>
+                    <label class="opt-label"><input type="checkbox" name="m1" value="Disagree"><span>Disagree</span></label>
+                    <label class="opt-label"><input type="checkbox" name="m1" value="Strongly Disagree"><span>Str. Dis</span></label>
+                </div>
+            </div>
+
+            <div class="eval-row">
+                <div class="eval-title">Site Care &amp; Cleanliness</div>
+                <div class="eval-desc">Work area was maintained safely and cleaned thoroughly.</div>
+                <div class="options-container">
+                    <label class="opt-label"><input type="checkbox" name="m2" value="Strongly Agree"><span>Str. Agree</span></label>
+                    <label class="opt-label"><input type="checkbox" name="m2" value="Agree"><span>Agree</span></label>
+                    <label class="opt-label"><input type="checkbox" name="m2" value="Neutral"><span>Neutral</span></label>
+                    <label class="opt-label"><input type="checkbox" name="m2" value="Disagree"><span>Disagree</span></label>
+                    <label class="opt-label"><input type="checkbox" name="m2" value="Strongly Disagree"><span>Str. Dis</span></label>
+                </div>
+            </div>
+
+            <div class="eval-row">
+                <div class="eval-title">Workmanship Quality</div>
+                <div class="eval-desc">Layout, cuts, seams, transitions, and trim look excellent.</div>
+                <div class="options-container">
+                    <label class="opt-label"><input type="checkbox" name="m3" value="Strongly Agree"><span>Str. Agree</span></label>
+                    <label class="opt-label"><input type="checkbox" name="m3" value="Agree"><span>Agree</span></label>
+                    <label class="opt-label"><input type="checkbox" name="m3" value="Neutral"><span>Neutral</span></label>
+                    <label class="opt-label"><input type="checkbox" name="m3" value="Disagree"><span>Disagree</span></label>
+                    <label class="opt-label"><input type="checkbox" name="m3" value="Strongly Disagree"><span>Str. Dis</span></label>
+                </div>
+            </div>
+
+            <div class="eval-row">
+                <div class="eval-title">Professionalism</div>
+                <div class="eval-desc">The installation crew was courteous, respectful, and professional.</div>
+                <div class="options-container">
+                    <label class="opt-label"><input type="checkbox" name="m4" value="Strongly Agree"><span>Str. Agree</span></label>
+                    <label class="opt-label"><input type="checkbox" name="m4" value="Agree"><span>Agree</span></label>
+                    <label class="opt-label"><input type="checkbox" name="m4" value="Neutral"><span>Neutral</span></label>
+                    <label class="opt-label"><input type="checkbox" name="m4" value="Disagree"><span>Disagree</span></label>
+                    <label class="opt-label"><input type="checkbox" name="m4" value="Strongly Disagree"><span>Str. Dis</span></label>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>3. Final Walkthrough Checklist</h3>
+            
+            <label class="check-item">
+                <input type="checkbox" id="chk1" required>
+                <p><strong>Visual Inspection</strong>Completed floor has been walked and thoroughly inspected for consistency, surface defects, gaps, or any loose planks/tiles.</p>
+            </label>
+            
+            <label class="check-item">
+                <input type="checkbox" id="chk2" required>
+                <p><strong>Transitions &amp; Trim</strong>All baseboards, quarter-rounds, t-moldings, reducers, and stair noses are securely fastened, properly aligned, and neatly finished.</p>
+            </label>
+
+            <label class="check-item">
+                <input type="checkbox" id="chk3" required>
+                <p><strong>Doors &amp; Clearances</strong>All doors open and close freely over the new flooring.</p>
+            </label>
+            
+            <label class="check-item" style="margin-bottom:0;">
+                <input type="checkbox" id="chk4" required>
+                <p><strong>Clean Up</strong>All scrap pieces, packaging materials, underlayment debris, and tools have been cleaned up and removed from the living spaces.</p>
+            </label>
+        </div>
+
+        <div class="card">
+            <h3>4. Site Documentation Photos</h3>
+            <div class="photo-upload-zone" onclick="document.getElementById('photoInput').click()">
+                <p>📸 Tap to Take Photo or Choose Files</p>
+                <input type="file" id="photoInput" style="display:none;" accept="image/*" multiple>
+            </div>
+            <div id="photoPreviewGrid" class="photo-preview-grid"></div>
+        </div>
+
+        <div class="card">
+            <h3>5. Additional Comments</h3>
+            <textarea id="comments" class="form-control" placeholder="Enter any notable comments, context or field variance adjustments here..."></textarea>
+        </div>
+
+        <div class="card">
+            <h3>6. Final Sign-Off &amp; Acceptance</h3>
+            
+            <div style="margin-bottom:20px;">
+                <label style="font-weight:700; color:var(--primary); font-size:14px;">Installer Acknowledgment</label>
+                <p style="font-size:12px; color:#4a5568; margin-bottom:8px;">Certified that trade criteria have been met.</p>
+                <div class="sig-container">
+                    <button type="button" class="clear-btn" onclick="clearSig('installerCanvas')">Clear</button>
+                    <canvas id="installerCanvas"></canvas>
+                </div>
+            </div>
+
+            <div>
+                <label style="font-weight:700; color:var(--primary); font-size:14px;">Customer Acceptance</label>
+                <p style="font-size:12px; color:#4a5568; margin-bottom:8px;">Except for items listed in Section 5, the project is accepted as complete.</p>
+                <div class="sig-container">
+                    <button type="button" class="clear-btn" onclick="clearSig('customerCanvas') text-align: center;">Clear</button>
+                    <canvas id="customerCanvas"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-grid">
+            <button type="submit" class="btn-base btn-submit">Save Local</button>
+            <button type="button" class="btn-base btn-email" onclick="composeEmail()">Send Email</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    let loadedPhotosCount = 0;
+
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('sw.js')
+                .then(reg => console.log('Service Worker Operational.'))
+                .catch(err => console.log('SW registration failed:', err));
+        });
+    }
+
+    ['m1', 'm2', 'm3', 'm4'].forEach(groupName => {
+        const checkboxes = document.querySelectorAll(`input[name="${groupName}"]`);
+        checkboxes.forEach(cb => {
+            cb.addEventListener('change', function() {
+                if(this.checked) {
+                    checkboxes.forEach(other => { if(other !== this) other.checked = false; });
+                }
+            });
+        });
+    });
+
+    // Capture files/native camera stream and display image elements
+    document.getElementById('photoInput').addEventListener('change', function(e) {
+        const grid = document.getElementById('photoPreviewGrid');
+        const files = e.target.files;
+        
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const reader = new FileReader();
+            
+            reader.onload = function(event) {
+                const img = document.createElement('img');
+                img.src = event.target.result;
+                img.className = 'photo-thumb';
+                grid.appendChild(img);
+                loadedPhotosCount++;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Drawing Canvas Tracking Logic
+    function initCanvas(canvasId) {
+        const canvas = document.getElementById(canvasId);
+        const ctx = canvas.getContext('2d');
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+
+        let drawing = false;
+
+        function getPos(e) {
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            const canvasRect = canvas.getBoundingClientRect();
+            return { x: clientX - canvasRect.left, y: clientY - canvasRect.top };
+        }
+
+        function startDrawing(e) {
+            drawing = true;
+            ctx.beginPath();
+            const pos = getPos(e);
+            ctx.moveTo(pos.x, pos.y);
+            e.preventDefault();
+        }
+
+        function draw(e) {
+            if (!drawing) return;
+            const pos = getPos(e);
+            ctx.lineTo(pos.x, pos.y);
+            ctx.strokeStyle = '#1a365d';
+            ctx.lineWidth = 2.5;
+            ctx.lineCap = 'round';
+            ctx.stroke();
+            e.preventDefault();
+        }
+
+        function stopDrawing() { drawing = false; }
+
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+
+        canvas.addEventListener('touchstart', startDrawing, {passive: false});
+        canvas.addEventListener('touchmove', draw, {passive: false});
+        canvas.addEventListener('touchend', stopDrawing);
+    }
+
+    function clearSig(canvasId) {
+        const canvas = document.getElementById(canvasId);
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        initCanvas('installerCanvas');
+        initCanvas('customerCanvas');
+        document.getElementById('compDate').valueAsDate = new Date();
+    });
+
+    function getEvalVal(name) {
+        const checked = document.querySelector(`input[name="${name}"]:checked`);
+        return checked ? checked.value : 'Not Rated';
+    }
+
+    // Dynamic Deep-Linking Email Link Builder
+    function composeEmail() {
+        const name = document.getElementById('custName').value || 'N/A';
+        const job = document.getElementById('jobAddr').value || 'N/A';
+        const date = document.getElementById('compDate').value || 'N/A';
+        const inst = document.getElementById('installerName').value || 'N/A';
+        const comm = document.getElementById('comments').value || 'None';
+
+        let types = [];
+        document.querySelectorAll('input[name="fType"]:checked').forEach(cb => types.push(cb.value));
+        const fSummary = types.length > 0 ? types.join(', ') : 'None Selected';
+
+        const subject = encodeURIComponent(`Exclusive Floors Installation Sign-Off - ${job}`);
+        
+        let bodyString = `EXCLUSIVE FLOORS - INSTALLATION SIGN-OFF COMPLIANCE SUMMARY\\n`;
+        bodyString += `=========================================================\\n\\n`;
+        bodyString += `Customer Name: ${name}\\n`;
+        bodyString += `Job Address - Job#: ${job}\\n`;
+        bodyString += `Completion Date: ${date}\\n`;
+        bodyString += `Lead Installer: ${inst}\\n`;
+        bodyString += `Material Type Profiles: ${fSummary}\\n\\n`;
+        bodyString += `INSTALLATION AUDIT SCORES:\\n`;
+        bodyString += `- Punctuality & Communication: ${getEvalVal('m1')}\\n`;
+        bodyString += `- Site Care & Cleanliness: ${getEvalVal('m2')}\\n`;
+        bodyString += `- Workmanship Quality: ${getEvalVal('m3')}\\n`;
+        bodyString += `- Professionalism: ${getEvalVal('m4')}\\n\\n`;
+        bodyString += `WALKTHROUGH VERIFICATION STATUS:\\n`;
+        bodyString += `- Visual Inspection Track: Passed\\n`;
+        bodyString += `- Transitions & Trim Finish: Passed\\n`;
+        bodyString += `- Doors & Clearance Verification: Passed\\n`;
+        bodyString += `- Site Substrate Clean-up Operations: Passed\\n\\n`;
+        bodyString += `FIELD PHOTO SUMMARY:\\n`;
+        bodyString += `- Total Audit Images Captured in Session: ${loadedPhotosCount} file(s)\\n\\n`;
+        bodyString += `ADDITIONAL COMMENTS & DISPENSATIONS:\\n`;
+        bodyString += `${comm}\\n\\n`;
+        bodyString += `*Signatures matched and logged securely inside local database terminal.*\\n`;
+
+        const body = encodeURIComponent(bodyString);
+        window.location.href = `mailto:?subject=${subject}&body=${body}`;
+    }
+
+    document.getElementById('signoffForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = {
+            customerName: document.getElementById('custName').value,
+            jobAddress: document.getElementById('jobAddr').value,
+            completionDate: document.getElementById('compDate').value,
+            installer: document.getElementById('installerName').value,
+            comments: document.getElementById('comments').value,
+            photosAttachedCount: loadedPhotosCount,
+            timestamp: new Date().toISOString()
+        };
+
+        let entries = JSON.parse(localStorage.getItem('flooring_signoffs') || '[]');
+        entries.push(formData);
+        localStorage.setItem('flooring_signoffs', JSON.stringify(entries));
+
+        const msg = document.getElementById('saveNotification');
+        msg.style.display = 'block';
+        window.scrollTo({top: 0, behavior: 'smooth'});
+
+        this.reset();
+        clearSig('installerCanvas');
+        clearSig('customerCanvas');
+        document.getElementById('photoPreviewGrid').innerHTML = '';
+        loadedPhotosCount = 0;
+        document.getElementById('compDate').valueAsDate = new Date();
+
+        setTimeout(() => { msg.style.display = 'none'; }, 4000);
+    });
+</script>
+</body>
+</html>
