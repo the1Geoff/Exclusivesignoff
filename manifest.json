@@ -1,0 +1,18 @@
+{
+  "name": "Exclusive Floors Sign-Off Workspace",
+  "short_name": "EF Sign-Off",
+  "description": "Exclusive Floors Interactive Field Walkthrough & Satisfaction Sign-Off Sheet App.",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background-color": "#f7fafc",
+  "theme-color": "#1a365d",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/5973/5973533.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
