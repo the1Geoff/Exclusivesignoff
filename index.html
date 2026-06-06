@@ -326,10 +326,8 @@
         }
 
         .btn-submit {
-            grid-column: span 2;
             background: var(--primary);
             color: white;
-            margin-bottom: 4px;
             box-shadow: 0 4px 6px rgba(26, 54, 93, 0.2);
         }
         .btn-submit:hover { background: #10223b; }
@@ -340,13 +338,6 @@
             box-shadow: 0 4px 6px rgba(229, 62, 62, 0.2);
         }
         .btn-pdf:hover { background: #9b2c2c; }
-
-        .btn-email {
-            background: #2b6cb0;
-            color: white;
-            box-shadow: 0 4px 6px rgba(43, 108, 176, 0.2);
-        }
-        .btn-email:hover { background: #1d4ed8; }
 
         .saved-badge {
             background: #c6f6d5;
@@ -531,8 +522,7 @@
 
         <div class="action-grid">
             <button type="submit" class="btn-base btn-submit">Save Record Locally</button>
-            <button type="button" class="btn-base btn-pdf" onclick="window.print()">Download PDF Report</button>
-            <button type="button" class="btn-base btn-email" onclick="composeEmail()">Send Email Summary</button>
+            <button type="button" class="btn-base btn-pdf" onclick="window.print()">Create PDF / Print</button>
         </div>
     </form>
 </div>
@@ -594,7 +584,6 @@
             return { x: clientX - canvasRect.left, y: clientY - canvasRect.top };
         }
 
-        // Fix drawing on touch screens by passing explicit configurations
         function startDrawing(e) {
             drawing = true;
             ctx.beginPath();
@@ -636,51 +625,6 @@
         initCanvas('customerCanvas');
         document.getElementById('compDate').valueAsDate = new Date();
     });
-
-    function getEvalVal(name) {
-        const checked = document.querySelector(`input[name="${name}"]:checked`);
-        return checked ? checked.value : 'Not Rated';
-    }
-
-    function composeEmail() {
-        const name = document.getElementById('custName').value || 'N/A';
-        const job = document.getElementById('jobAddr').value || 'N/A';
-        const date = document.getElementById('compDate').value || 'N/A';
-        const inst = document.getElementById('installerName').value || 'N/A';
-        const comm = document.getElementById('comments').value || 'None';
-
-        let types = [];
-        document.querySelectorAll('input[name="fType"]:checked').forEach(cb => types.push(cb.value));
-        const fSummary = types.length > 0 ? types.join(', ') : 'None Selected';
-
-        const subject = encodeURIComponent(`Exclusive Floors Installation Sign-Off - ${job}`);
-        
-        let bodyString = `EXCLUSIVE FLOORS - INSTALLATION SIGN-OFF COMPLIANCE SUMMARY\\n`;
-        bodyString += `=========================================================\\n\\n`;
-        bodyString += `Customer Name: ${name}\\n`;
-        bodyString += `Job Address - Job#: ${job}\\n`;
-        bodyString += `Completion Date: ${date}\\n`;
-        bodyString += `Lead Installer: ${inst}\\n`;
-        bodyString += `Material Type Profiles: ${fSummary}\\n\\n`;
-        bodyString += `INSTALLATION AUDIT SCORES:\\n`;
-        bodyString += `- Punctuality & Communication: ${getEvalVal('m1')}\\n`;
-        bodyString += `- Site Care & Cleanliness: ${getEvalVal('m2')}\\n`;
-        bodyString += `- Workmanship Quality: ${getEvalVal('m3')}\\n`;
-        bodyString += `- Professionalism: ${getEvalVal('m4')}\\n\\n`;
-        bodyString += `WALKTHROUGH VERIFICATION STATUS:\\n`;
-        bodyString += `- Visual Inspection Track: Passed\\n`;
-        bodyString += `- Transitions & Trim Finish: Passed\\n`;
-        bodyString += `- Doors & Clearance Verification: Passed\\n`;
-        bodyString += `- Site Substrate Clean-up Operations: Passed\\n\\n`;
-        bodyString += `FIELD PHOTO SUMMARY:\\n`;
-        bodyString += `- Total Audit Images Captured in Session: ${loadedPhotosCount} file(s)\\n\\n`;
-        bodyString += `ADDITIONAL COMMENTS & DISPENSATIONS:\\n`;
-        bodyString += `${comm}\\n\\n`;
-        bodyString += `*Signatures matched and logged securely inside local database terminal.*\\n`;
-
-        const body = encodeURIComponent(bodyString);
-        window.location.href = `mailto:?subject=${subject}&body=${body}`;
-    }
 
     document.getElementById('signoffForm').addEventListener('submit', function(e) {
         e.preventDefault();
