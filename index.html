@@ -109,7 +109,6 @@
             font-size: 15px;
             background-color: #ffffff;
             transition: border-color 0.2s;
-            -webkit-appearance: none;
         }
 
         .form-control:focus {
@@ -151,7 +150,7 @@
             color: var(--secondary);
         }
 
-        /* Section 2 Grid Design */
+        /* Section 2 Evaluation Design */
         .eval-row {
             border-bottom: 1px solid var(--border);
             padding: 14px 0;
@@ -317,7 +316,7 @@
             justify-content: center;
             height: 50px;
             border-radius: 8px;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -327,11 +326,20 @@
         }
 
         .btn-submit {
+            grid-column: span 2;
             background: var(--primary);
             color: white;
+            margin-bottom: 4px;
             box-shadow: 0 4px 6px rgba(26, 54, 93, 0.2);
         }
         .btn-submit:hover { background: #10223b; }
+
+        .btn-pdf {
+            background: #e53e3e;
+            color: white;
+            box-shadow: 0 4px 6px rgba(229, 62, 62, 0.2);
+        }
+        .btn-pdf:hover { background: #9b2c2c; }
 
         .btn-email {
             background: #2b6cb0;
@@ -350,6 +358,17 @@
             margin-bottom: 20px;
             display: none;
             font-size: 14px;
+        }
+
+        /* Print Media Style Overrides for flawless PDF Generation output layout */
+        @media print {
+            body { background: white; color: black; padding: 0; }
+            .card { box-shadow: none; border: 1px solid #cbd5e0; padding: 15px; margin-bottom: 15px; page-break-inside: avoid; }
+            .action-grid, .photo-upload-zone, .clear-btn, .saved-badge { display: none !important; }
+            header { background: #1a365d !important; color: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            header h2 { color: #cbd5e0 !important; }
+            .opt-label:has(input:checked) { background-color: #1a365d !important; color: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            canvas { border: 1px solid #cbd5e0; }
         }
     </style>
 </head>
@@ -504,15 +523,16 @@
                 <label style="font-weight:700; color:var(--primary); font-size:14px;">Customer Acceptance</label>
                 <p style="font-size:12px; color:#4a5568; margin-bottom:8px;">Except for items listed in Section 5, the project is accepted as complete.</p>
                 <div class="sig-container">
-                    <button type="button" class="clear-btn" onclick="clearSig('customerCanvas') text-align: center;">Clear</button>
+                    <button type="button" class="clear-btn" onclick="clearSig('customerCanvas')">Clear</button>
                     <canvas id="customerCanvas"></canvas>
                 </div>
             </div>
         </div>
 
         <div class="action-grid">
-            <button type="submit" class="btn-base btn-submit">Save Local</button>
-            <button type="button" class="btn-base btn-email" onclick="composeEmail()">Send Email</button>
+            <button type="submit" class="btn-base btn-submit">Save Record Locally</button>
+            <button type="button" class="btn-base btn-pdf" onclick="window.print()">Download PDF Report</button>
+            <button type="button" class="btn-base btn-email" onclick="composeEmail()">Send Email Summary</button>
         </div>
     </form>
 </div>
@@ -539,7 +559,6 @@
         });
     });
 
-    // Capture files/native camera stream and display image elements
     document.getElementById('photoInput').addEventListener('change', function(e) {
         const grid = document.getElementById('photoPreviewGrid');
         const files = e.target.files;
@@ -559,7 +578,6 @@
         }
     });
 
-    // Drawing Canvas Tracking Logic
     function initCanvas(canvasId) {
         const canvas = document.getElementById(canvasId);
         const ctx = canvas.getContext('2d');
@@ -576,12 +594,13 @@
             return { x: clientX - canvasRect.left, y: clientY - canvasRect.top };
         }
 
+        // Fix drawing on touch screens by passing explicit configurations
         function startDrawing(e) {
             drawing = true;
             ctx.beginPath();
             const pos = getPos(e);
             ctx.moveTo(pos.x, pos.y);
-            e.preventDefault();
+            if (e.touches) e.preventDefault();
         }
 
         function draw(e) {
@@ -592,7 +611,7 @@
             ctx.lineWidth = 2.5;
             ctx.lineCap = 'round';
             ctx.stroke();
-            e.preventDefault();
+            if (e.touches) e.preventDefault();
         }
 
         function stopDrawing() { drawing = false; }
@@ -623,7 +642,6 @@
         return checked ? checked.value : 'Not Rated';
     }
 
-    // Dynamic Deep-Linking Email Link Builder
     function composeEmail() {
         const name = document.getElementById('custName').value || 'N/A';
         const job = document.getElementById('jobAddr').value || 'N/A';
