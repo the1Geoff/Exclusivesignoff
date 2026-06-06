@@ -351,11 +351,55 @@
             font-size: 14px;
         }
 
+        /* History Table Dashboard Styles */
+        .history-table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            margin-top: 10px;
+        }
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12.5px;
+            text-align: left;
+        }
+        .history-table th {
+            background: #edf2f7;
+            color: var(--primary);
+            font-weight: 700;
+            padding: 10px;
+            border-bottom: 2px solid var(--border);
+        }
+        .history-table td {
+            padding: 10px;
+            border-bottom: 1px solid var(--border);
+            color: #4a5568;
+        }
+        .history-table tr:last-child td { border-bottom: none; }
+        .history-table tr:nth-child(even) { background: #fafbfe; }
+        .empty-history-text {
+            font-size: 13px;
+            color: #a0aec0;
+            text-align: center;
+            padding: 20px 0;
+        }
+        .btn-clear-history {
+            background: none;
+            border: none;
+            color: #e53e3e;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            float: right;
+            margin-top: -24px;
+            text-transform: uppercase;
+        }
+
         /* Print Media Style Overrides for flawless PDF Generation output layout */
         @media print {
             body { background: white; color: black; padding: 0; }
             .card { box-shadow: none; border: 1px solid #cbd5e0; padding: 15px; margin-bottom: 15px; page-break-inside: avoid; }
-            .action-grid, .photo-upload-zone, .clear-btn, .saved-badge { display: none !important; }
+            .action-grid, .photo-upload-zone, .clear-btn, .saved-badge, .history-card { display: none !important; }
             header { background: #1a365d !important; color: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             header h2 { color: #cbd5e0 !important; }
             .opt-label:has(input:checked) { background-color: #1a365d !important; color: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
@@ -525,6 +569,27 @@
             <button type="button" class="btn-base btn-pdf" onclick="generateSmartPDF()">Create PDF / Print</button>
         </div>
     </form>
+
+    <div class="card history-card" style="margin-top: 25px; border-color: #cbd5e0;">
+        <h3>7. Sign-Off Storage History</h3>
+        <button type="button" class="btn-clear-history" onclick="clearAllHistory()">Clear Dashboard</button>
+        <div class="history-table-wrapper">
+            <table class="history-table" id="historyTable">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Customer</th>
+                        <th>Job Address - Job#</th>
+                        <th>Lead Installer</th>
+                        <th>Photos</th>
+                    </tr>
+                </thead>
+                <tbody id="historyTableBody">
+                    </tbody>
+            </table>
+            <div id="emptyHistoryMessage" class="empty-history-text">No records saved on this device memory yet.</div>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -620,35 +685,87 @@
         ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
 
-    // Dynamic Filename Naming Engine
     function generateSmartPDF() {
         const customerName = document.getElementById('custName').value.trim();
         const jobAddress = document.getElementById('jobAddr').value.trim();
-        
-        // Store original title context to revert cleanly later
         const originalTitle = document.title;
         
         if (customerName || jobAddress) {
-            // Join fields with clear separators, stripping illegal filename symbols
             const dynamicName = [customerName, jobAddress].filter(Boolean).join(' - ');
             document.title = dynamicName.replace(/[\\\\/:*?"<>|]/g, '');
         } else {
             document.title = "Exclusive Floors Sign-Off Report";
         }
         
-        // Trigger system print framework
         window.print();
         
-        // Instantly revert browser tab title text smoothly right after opening window
         setTimeout(() => {
             document.title = originalTitle;
         }, 1000);
+    }
+
+    // Dynamic History Builder Dashboard Logic
+    function updateHistoryDashboard() {
+        const entries = JSON.parse(localStorage.getItem('flooring_signoffs') || '[]');
+        const tableBody = document.getElementById('historyTableBody');
+        const emptyMsg = document.getElementById('emptyHistoryMessage');
+        const tableEl = document.getElementById('historyTable');
+
+        tableBody.innerHTML = '';
+
+        if (entries.length === 0) {
+            tableEl.style.display = 'none';
+            emptyMsg.style.display = 'block';
+            return;
+        }
+
+        tableEl.style.display = 'table';
+        emptyMsg.style.display = 'none';
+
+        // Render backwards so newest saved records show right at the top
+        entries.reverse().forEach(item => {
+            const row = document.createElement('tr');
+            
+            // Format data entry cells cleanly
+            const dateCell = document.createElement('td');
+            dateCell.textContent = item.completionDate || 'N/A';
+            row.appendChild(dateCell);
+
+            const customerCell = document.createElement('td');
+            customerCell.textContent = item.customerName || 'N/A';
+            customerCell.style.fontWeight = '600';
+            row.appendChild(customerCell);
+
+            const addressCell = document.createElement('td');
+            addressCell.textContent = item.jobAddress || 'N/A';
+            row.appendChild(addressCell);
+
+            const installerCell = document.createElement('td');
+            installerCell.textContent = item.installer || 'N/A';
+            row.appendChild(installerCell);
+
+            const photoCell = document.createElement('td');
+            photoCell.textContent = item.photosAttachedCount > 0 ? `📸 ${item.photosAttachedCount} imgs` : '0';
+            row.appendChild(photoCell);
+
+            tableBody.appendChild(row);
+        });
+    }
+
+    function clearAllHistory() {
+        if(confirm("Are you sure you want to completely wipe out the local logs dashboard memory on this tablet?")) {
+            localStorage.removeItem('flooring_signoffs');
+            updateHistoryDashboard();
+        }
     }
 
     window.addEventListener('DOMContentLoaded', () => {
         initCanvas('installerCanvas');
         initCanvas('customerCanvas');
         document.getElementById('compDate').valueAsDate = new Date();
+        
+        // Initial build populate pull tracking record history data
+        updateHistoryDashboard();
     });
 
     document.getElementById('signoffForm').addEventListener('submit', function(e) {
@@ -678,6 +795,9 @@
         document.getElementById('photoPreviewGrid').innerHTML = '';
         loadedPhotosCount = 0;
         document.getElementById('compDate').valueAsDate = new Date();
+
+        // Refresh the log data elements inside dashboard view immediately
+        updateHistoryDashboard();
 
         setTimeout(() => { msg.style.display = 'none'; }, 4000);
     });
