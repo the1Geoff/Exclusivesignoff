@@ -117,6 +117,16 @@
             box-shadow: 0 0 0 3px rgba(43, 108, 176, 0.1);
         }
 
+        select.form-control {
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234a5568' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            background-size: 16px;
+            padding-right: 40px;
+        }
+
         .flooring-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
@@ -148,6 +158,21 @@
             border-color: var(--secondary);
             background-color: rgba(43, 108, 176, 0.05);
             color: var(--secondary);
+        }
+
+        .conditional-field {
+            display: none;
+            margin-top: 12px;
+            padding: 14px;
+            background: #f8fafc;
+            border: 1px dashed #cbd5e0;
+            border-radius: 8px;
+            animation: fadeIn 0.2s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-4px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* Section 2 Evaluation Design */
@@ -369,11 +394,13 @@
             font-weight: 700;
             padding: 10px;
             border-bottom: 2px solid var(--border);
+            white-space: nowrap;
         }
         .history-table td {
             padding: 10px;
             border-bottom: 1px solid var(--border);
             color: #4a5568;
+            white-space: nowrap;
         }
         .history-table tr:last-child td { border-bottom: none; }
         .history-table tr:nth-child(even) { background: #fafbfe; }
@@ -404,6 +431,8 @@
             header h2 { color: #cbd5e0 !important; }
             .opt-label:has(input:checked) { background-color: #1a365d !important; color: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             canvas { border: 1px solid #cbd5e0; }
+            .conditional-field { border: 1px solid #cbd5e0; background: white; }
+            select.form-control { background-image: none !important; padding-right: 14px; }
         }
     </style>
 </head>
@@ -421,15 +450,34 @@
 
         <div class="card">
             <h3>1. Project Information</h3>
-            <div class="form-group">
-                <label>Customer Name</label>
-                <input type="text" id="custName" class="form-control" required>
+            <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <div>
+                    <label>Customer Name</label>
+                    <input type="text" id="custName" class="form-control" required>
+                </div>
+                <div>
+                    <label>Job#</label>
+                    <input type="text" id="jobNum" class="form-control" required>
+                </div>
             </div>
-            <div class="form-group">
-                <label>Job Address - Job#</label>
-                <input type="text" id="jobAddr" class="form-control" required>
+            
+            <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <div>
+                    <label>Job Address</label>
+                    <input type="text" id="jobAddr" class="form-control" required>
+                </div>
+                <div>
+                    <label>Exclusive Floors Location</label>
+                    <select id="storeLocation" class="form-control" required>
+                        <option value="" disabled selected>Select Store...</option>
+                        <option value="Surrey">Surrey</option>
+                        <option value="Coquitlam">Coquitlam</option>
+                        <option value="Abbotsford">Abbotsford</option>
+                    </select>
+                </div>
             </div>
-            <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 0;">
+            
+            <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
                 <div>
                     <label>Completion Date</label>
                     <input type="date" id="compDate" class="form-control" required>
@@ -448,6 +496,14 @@
                     <label class="cb-label"><input type="checkbox" name="fType" value="Vinyl"> LVP/LVT</label>
                     <label class="cb-label"><input type="checkbox" name="fType" value="Tile"> Tile</label>
                     <label class="cb-label"><input type="checkbox" name="fType" value="Carpet"> Carpet</label>
+                    <label class="cb-label"><input type="checkbox" name="fType" id="floorOtherCb" value="Other"> Other</label>
+                </div>
+                
+                <div class="conditional-field" id="otherFlooringContainer">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label style="color: var(--secondary);">Describe "Other" Scope of Work done:</label>
+                        <input type="text" id="floorOtherDesc" class="form-control" placeholder="e.g., Underlayment fix, transitions tracking, subfloor prep...">
+                    </div>
                 </div>
             </div>
         </div>
@@ -514,7 +570,7 @@
             
             <label class="check-item">
                 <input type="checkbox" id="chk2" required>
-                <p><strong>Transitions &amp; Trim</strong>All baseboards, quarter-rounds, t-moldings, reducers, and stair noses are securely fastened, properly aligned, and neatly finished.</p>
+                <p><strong>Transitions &amp; Trim</strong>All baseboards, quarter-rounds, t-moldings, reducers, and stairnosings are securely fastened, properly aligned, and neatly finished.</p>
             </label>
 
             <label class="check-item">
@@ -577,11 +633,13 @@
             <table class="history-table" id="historyTable">
                 <thead>
                     <tr>
-                        <th>Date</th>
-                        <th>Customer</th>
-                        <th>Job Address - Job#</th>
-                        <th>Lead Installer</th>
-                        <th>Photos</th>
+                        <th style="width: 12%;">Date</th>
+                        <th style="width: 15%;">Location</th>
+                        <th style="width: 18%;">Customer</th>
+                        <th style="width: 12%;">Job#</th>
+                        <th style="width: 23%;">Job Address</th>
+                        <th style="width: 12%;">Installer</th>
+                        <th style="width: 8%;">Photos</th>
                     </tr>
                 </thead>
                 <tbody id="historyTableBody">
@@ -602,6 +660,22 @@
                 .catch(err => console.log('SW registration failed:', err));
         });
     }
+
+    const otherFlooringCb = document.getElementById('floorOtherCb');
+    const otherFlooringContainer = document.getElementById('otherFlooringContainer');
+    const otherFlooringInput = document.getElementById('floorOtherDesc');
+
+    otherFlooringCb.addEventListener('change', function() {
+        if (this.checked) {
+            otherFlooringContainer.style.display = 'block';
+            otherFlooringInput.setAttribute('required', 'true');
+            setTimeout(() => { otherFlooringInput.focus(); }, 150);
+        } else {
+            otherFlooringContainer.style.display = 'none';
+            otherFlooringInput.removeAttribute('required');
+            otherFlooringInput.value = '';
+        }
+    });
 
     ['m1', 'm2', 'm3', 'm4'].forEach(groupName => {
         const checkboxes = document.querySelectorAll(`input[name="${groupName}"]`);
@@ -687,11 +761,18 @@
 
     function generateSmartPDF() {
         const customerName = document.getElementById('custName').value.trim();
+        const jobNum = document.getElementById('jobNum').value.trim();
         const jobAddress = document.getElementById('jobAddr').value.trim();
+        const storeLoc = document.getElementById('storeLocation').value;
         const originalTitle = document.title;
         
-        if (customerName || jobAddress) {
-            const dynamicName = [customerName, jobAddress].filter(Boolean).join(' - ');
+        let titleParts = [];
+        if (storeLoc) titleParts.push(storeLoc);
+        if (customerName) titleParts.push(customerName);
+        if (jobNum) titleParts.push(`Job ${jobNum}`);
+        
+        if (titleParts.length > 0) {
+            const dynamicName = titleParts.join(' - ');
             document.title = dynamicName.replace(/[\\\\/:*?"<>|]/g, '');
         } else {
             document.title = "Exclusive Floors Sign-Off Report";
@@ -704,7 +785,6 @@
         }, 1000);
     }
 
-    // Dynamic History Builder Dashboard Logic
     function updateHistoryDashboard() {
         const entries = JSON.parse(localStorage.getItem('flooring_signoffs') || '[]');
         const tableBody = document.getElementById('historyTableBody');
@@ -722,19 +802,27 @@
         tableEl.style.display = 'table';
         emptyMsg.style.display = 'none';
 
-        // Render backwards so newest saved records show right at the top
         entries.reverse().forEach(item => {
             const row = document.createElement('tr');
             
-            // Format data entry cells cleanly
             const dateCell = document.createElement('td');
             dateCell.textContent = item.completionDate || 'N/A';
             row.appendChild(dateCell);
+
+            const locationCell = document.createElement('td');
+            locationCell.textContent = item.storeLocation || 'N/A';
+            locationCell.style.color = '#2b6cb0';
+            locationCell.style.fontWeight = '500';
+            row.appendChild(locationCell);
 
             const customerCell = document.createElement('td');
             customerCell.textContent = item.customerName || 'N/A';
             customerCell.style.fontWeight = '600';
             row.appendChild(customerCell);
+
+            const jobNumCell = document.createElement('td');
+            jobNumCell.textContent = item.jobNumber || 'N/A';
+            row.appendChild(jobNumCell);
 
             const addressCell = document.createElement('td');
             addressCell.textContent = item.jobAddress || 'N/A';
@@ -745,7 +833,7 @@
             row.appendChild(installerCell);
 
             const photoCell = document.createElement('td');
-            photoCell.textContent = item.photosAttachedCount > 0 ? `📸 ${item.photosAttachedCount} imgs` : '0';
+            photoCell.textContent = item.photosAttachedCount > 0 ? `📸 ${item.photosAttachedCount}` : '0';
             row.appendChild(photoCell);
 
             tableBody.appendChild(row);
@@ -763,20 +851,23 @@
         initCanvas('installerCanvas');
         initCanvas('customerCanvas');
         document.getElementById('compDate').valueAsDate = new Date();
-        
-        // Initial build populate pull tracking record history data
         updateHistoryDashboard();
     });
 
     document.getElementById('signoffForm').addEventListener('submit', function(e) {
         e.preventDefault();
         
+        const otherDescValue = otherFlooringCb.checked ? document.getElementById('floorOtherDesc').value : '';
+        
         const formData = {
             customerName: document.getElementById('custName').value,
+            jobNumber: document.getElementById('jobNum').value,
             jobAddress: document.getElementById('jobAddr').value,
+            storeLocation: document.getElementById('storeLocation').value,
             completionDate: document.getElementById('compDate').value,
             installer: document.getElementById('installerName').value,
             comments: document.getElementById('comments').value,
+            otherFlooringDescription: otherDescValue,
             photosAttachedCount: loadedPhotosCount,
             timestamp: new Date().toISOString()
         };
@@ -794,9 +885,9 @@
         clearSig('customerCanvas');
         document.getElementById('photoPreviewGrid').innerHTML = '';
         loadedPhotosCount = 0;
+        otherFlooringContainer.style.display = 'none';
+        otherFlooringInput.removeAttribute('required');
         document.getElementById('compDate').valueAsDate = new Date();
-
-        // Refresh the log data elements inside dashboard view immediately
         updateHistoryDashboard();
 
         setTimeout(() => { msg.style.display = 'none'; }, 4000);
