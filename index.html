@@ -522,7 +522,7 @@
 
         <div class="action-grid">
             <button type="submit" class="btn-base btn-submit">Save Record Locally</button>
-            <button type="button" class="btn-base btn-pdf" onclick="window.print()">Create PDF / Print</button>
+            <button type="button" class="btn-base btn-pdf" onclick="generateSmartPDF()">Create PDF / Print</button>
         </div>
     </form>
 </div>
@@ -618,6 +618,31 @@
         const canvas = document.getElementById(canvasId);
         const ctx = canvas.getContext('2d');
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    // Dynamic Filename Naming Engine
+    function generateSmartPDF() {
+        const customerName = document.getElementById('custName').value.trim();
+        const jobAddress = document.getElementById('jobAddr').value.trim();
+        
+        // Store original title context to revert cleanly later
+        const originalTitle = document.title;
+        
+        if (customerName || jobAddress) {
+            // Join fields with clear separators, stripping illegal filename symbols
+            const dynamicName = [customerName, jobAddress].filter(Boolean).join(' - ');
+            document.title = dynamicName.replace(/[\\\\/:*?"<>|]/g, '');
+        } else {
+            document.title = "Exclusive Floors Sign-Off Report";
+        }
+        
+        // Trigger system print framework
+        window.print();
+        
+        // Instantly revert browser tab title text smoothly right after opening window
+        setTimeout(() => {
+            document.title = originalTitle;
+        }, 1000);
     }
 
     window.addEventListener('DOMContentLoaded', () => {
